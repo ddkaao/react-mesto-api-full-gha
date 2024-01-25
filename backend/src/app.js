@@ -1,7 +1,6 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const cors = require('cors');
 const { celebrate, Joi } = require('celebrate');
 const cookieParser = require('cookie-parser');
@@ -16,6 +15,7 @@ const { error } = require('./middlewares/error');
 const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
+app.use(cors());
 const REGEX = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
 const PORT = 3000;
 const URI = 'mongodb://127.0.0.1:27017/mestodb';
@@ -25,8 +25,6 @@ mongoose.connect(URI);
 app.use(express.json());
 
 app.use(cookieParser());
-
-app.use(cors());
 
 app.use(requestLogger);
 
