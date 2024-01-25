@@ -8,7 +8,8 @@ const CREATED = 201;
 module.exports.getCards = async (req, res, next) => {
   try {
     const cards = await Card.find({});
-    return res.status(OK).send(cards);
+    const newCards = cards.reverse();
+    return res.status(OK).send(newCards);
   } catch (error) {
     return next(error);
   }

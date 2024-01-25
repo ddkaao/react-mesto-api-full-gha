@@ -33,12 +33,13 @@ class AuthApi {
         .then(this._getResponse);
     }
 
-    getToken(jwt) {
+    getToken() {
+        const token = localStorage.getItem('jwt');
         return fetch(`${this._url}/users/me`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization" : `Bearer ${jwt}`
+                "Authorization" : `Bearer ${token}`
             }
         })
         .then(this._getResponse);
@@ -46,7 +47,7 @@ class AuthApi {
 }
 
 const auth = new AuthApi({
-    url: 'https://auth.nomoreparties.co',
+    url: 'http://localhost:3000',
 });
 
 export default auth;

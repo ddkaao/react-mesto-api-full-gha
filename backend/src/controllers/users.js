@@ -49,10 +49,10 @@ module.exports.createUser = async (req, res, next) => {
       password: hash,
     });
     return res.status(CREATED).send({
-      name: newUser.name,
-      about: newUser.about,
-      avatar: newUser.avatar,
-      email: newUser.email,
+      data: {
+        _id: newUser._id,
+        email: newUser.email,
+      },
     });
   } catch (error) {
     return next(error);
@@ -107,8 +107,8 @@ module.exports.login = async (req, res, next) => {
     );
     return res
       .status(OK)
-      .cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true })
-      .send({ data: { _id: user._id, email: user.email }, token });
+    // .cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true })
+      .send({ token });
   } catch (error) {
     return next(error);
   }

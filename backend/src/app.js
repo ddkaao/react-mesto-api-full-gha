@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const cors = require('cors');
 const { celebrate, Joi } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
@@ -8,6 +10,7 @@ const {
   createUser,
   login,
 } = require('./controllers/users');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { auth } = require('./middlewares/auth');
 const { error } = require('./middlewares/error');
 const NotFoundError = require('./errors/NotFoundError');
@@ -22,6 +25,10 @@ mongoose.connect(URI);
 app.use(express.json());
 
 app.use(cookieParser());
+
+app.use(cors());
+
+app.use(requestLogger);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -45,6 +52,8 @@ app.post('/signup', celebrate({
 app.use(auth);
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
+
+app.use(errorLogger);
 
 app.use('/', (req, res, next) => {
   next(new NotFoundError('Страницы не существует'));
