@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const routeSignup = require('./signup');
 const routeSignin = require('./signin');
-const auth = require('../middlewares/auth');
+const { auth } = require('../middlewares/auth');
 const routeUsers = require('./users');
 const routeCards = require('./cards');
 
