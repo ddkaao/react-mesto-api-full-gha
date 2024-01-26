@@ -2,21 +2,16 @@ const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { celebrate, Joi } = require('celebrate');
 const cookieParser = require('cookie-parser');
+
 const { errors } = require('celebrate');
-const {
-  createUser,
-  login,
-} = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { auth } = require('./middlewares/auth');
+const router = require('./routes/main');
 const { error } = require('./middlewares/error');
-const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
 app.use(cors());
-const REGEX = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
+
 const PORT = 3000;
 const URI = 'mongodb://127.0.0.1:27017/mestodb';
 
@@ -28,34 +23,15 @@ app.use(cookieParser());
 
 app.use(requestLogger);
 
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(REGEX),
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(REGEX),
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  }),
-}), createUser);
+app.use(router);
 
-app.use(auth);
-app.use('/users', require('./routes/users'));
-app.use('/cards', require('./routes/cards'));
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 app.use(errorLogger);
-
-app.use('/', (req, res, next) => {
-  next(new NotFoundError('Страницы не существует'));
-});
 
 app.use(errors());
 app.use('/', error);

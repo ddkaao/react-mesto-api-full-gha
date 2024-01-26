@@ -135,7 +135,7 @@ class Api {
 
 /* Создание экземпляров Api */
 const api = new Api({
-    url: 'http://localhost:3000',
+    url: 'https://api.ddkaao.students.nomoredomainsmonster.ru',
 });
 
 export default api;
