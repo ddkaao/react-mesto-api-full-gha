@@ -51,8 +51,11 @@ module.exports.createUser = async (req, res, next) => {
     });
     return res.status(CREATED).send({
       data: {
-        _id: newUser._id,
         email: newUser.email,
+        name: newUser.name,
+        about: newUser.about,
+        avatar: newUser.avatar,
+        _id: newUser._id,
       },
     });
   } catch (error) {
