@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 158.160.143.43
+IP 158.160.143.43
 
 Frontend https://ddkaao.students.nomoredomainsmonster.ru
 
